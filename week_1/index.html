@@ -8,68 +8,75 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <title>Week_1</title>
     <style>
-        img{
-            height: 220px;
-            width: auto;
+        
+        .main_img > img{
+            height: 19rem;
+        }
+        
+        .images>img{
+            height: 10rem;
+            padding: 1rem ;
         }
     </style>
 </head>
 <body id="app">
-    <div class="container mt-4">
-        <div class="row d-flex justify-content-center">
+    <div class="container">
+        <div class="row mt-3">
             <div class="col-6">
-                <ol class="list-group list-group-numbered">
-                    <li class="list-group-item d-flex align-content-center justify-content-between" 
-                        v-for="item in products" 
-                        :key="item.id">
-                        <div class="ms-2 me-auto">
-                            <div class="fw-bold">{{item.category}}:{{item.title}}</div>
-                            <p class="fs-6">
-                                <span class="fw-bold">
-                                    價格：
-                                </span> 
-                                ${{item.price}}
-                                <span class="ms-3 fw-bold">
-                                    剩餘數量：
-                                </span> 
-                                {{item.num}}
-                            </p>
-                                
-                        </div>
-                        <button type="button" class="btn btn-primary" @click="temp = item ; isOpen=true">詳細內容</button>
-                    </li>
-                </ol>
+                <h2>產品列表</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">產品名稱</th>
+                            <th scope="col">原價</th>
+                            <th scope="col">售價</th>
+                            <th scope="col" class="text-center">是否啟用</th>
+                            <th scope="col" class="text-center">查看細節</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in products" class="align-middle">
+                            <td class="fw-bold">{{item.title}}</td>
+                            <td>{{item.origin_price}}</td>
+                            <td>{{item.price}}</td>
+                            <td class="text-center">
+                                <span v-if="item.is_enabled == '1'" class="text-success">啟用</span>
+                                <span v-else>未啟用</span>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-primary" @click="temp=item;isOpen=true">查看細節</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="text-black-50">目前有 <span class="fw-bold text-black">{{products.length}}</span>  項產品</p>
             </div>
-            <div class="col-4 border d-flex align-items-center justify-content-center">
-                <div v-if="isOpen === false">
-                    請選擇產品
-                </div>
-                <div v-else>
-                    <div class="text-end my-2">
-                        <button type="button" class="btn-close" @click="isOpen=false" aria-label="Close"></button>
+            <div class="col-6">
+                <h2 class="mb-3">單一產品細節</h2>
+                <div v-if="isOpen == false" class="text-black-50">請選擇一個商品查看</div>
+                <div v-else class="rounded-1">
+                    <div class="card py-4 px-3 mb-3">
+                        <div class="text-center mb-3 main_img">
+                            <img :src="temp.imageUrl" alt="temp.title">
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <h5>{{temp.title}}<span class="badge bg-primary ms-1">{{temp.category}}</span></h5> 
+                        </div>
+                        <div class=" mb-3">
+                            產品描述：{{temp.description}}
+                        </div>
+                        <div class=" mb-3">
+                            商品內容：{{temp.content}}
+                        </div>
+                        <h5>
+                            {{temp.price}} <del class="text-black-50">{{temp.origin_price}}</del>個 / 元
+                        </h5>
                     </div>
-                    <div class="fw-bold my-2">
-                        {{temp.category}}:{{temp.title}}
-                    </div>
-                    <img :src="temp.imagesUrl" :alt="temp.title">
-                    <div class="my-2">
-                        <span class="fw-bold">
-                            規格：
-                        </span> 
-                        {{temp.content}}
-                        <span class="fw-bold ms-3">
-                            價格：
-                        </span>
-                        ${{temp.price}}
-                    </div>
-                    <hr>
-                    <div class="my-2">
-                        <span class="fw-bold">
-                            產品介紹：
-                        </span> <br>
-                        {{temp.description}}
+                    <div class="images">
+                        <img  v-for="(item,index) in temp.imagesUrl"  class="img-fluid" :src="temp.imagesUrl[index]" :alt="temp.title">
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -131,16 +138,17 @@
     const app = createApp({
         data(){
             return{
+                // ...products,
                 products:[],
                 temp:{},
                 isOpen:false,
             }
         },
         created() {
-            this.products = products;
+            // this.products = products;
+            this.products = [...products];
         },
     });
     app.mount('#app');
-    console.log(products)
 </script>
 </html>
