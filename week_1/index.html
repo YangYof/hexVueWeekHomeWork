@@ -40,11 +40,11 @@
                             <td>{{item.origin_price}}</td>
                             <td>{{item.price}}</td>
                             <td class="text-center">
-                                <span v-if="item.is_enabled == '1'" class="text-success">啟用</span>
+                                <span v-if="item.is_enabled" class="text-success">啟用</span>
                                 <span v-else>未啟用</span>
                             </td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-primary" @click="temp=item;isOpen=true">查看細節</button>
+                                <button type="button" class="btn btn-primary" @click="temp = item;">查看細節</button>
                             </td>
                         </tr>
                     </tbody>
@@ -53,7 +53,7 @@
             </div>
             <div class="col-6">
                 <h2 class="mb-3">單一產品細節</h2>
-                <div v-if="isOpen == false" class="text-black-50">請選擇一個商品查看</div>
+                <div v-if="!temp.category" class="text-black-50">請選擇一個商品查看</div>
                 <div v-else class="rounded-1">
                     <div class="border rounded-1 py-4 px-3 mb-3">
                         <div class="text-center mb-3 main_img">
@@ -73,7 +73,7 @@
                         </h5>
                     </div>
                     <div class="images">
-                        <img  v-for="(item,index) in temp.imagesUrl"  class="img-fluid" :src="temp.imagesUrl[index]" :alt="temp.title">
+                        <img  v-for="(item,index) in temp.imagesUrl" :key="temp.id" class="img-fluid" :src="temp.imagesUrl[index]" :alt="temp.title">
                     </div>
                 </div>
 
@@ -139,14 +139,14 @@
         data(){
             return{
                 // ...products,
-                products:[],
+                products:[...products],
                 temp:{},
-                isOpen:false,
+                // isOpen:false,
             }
         },
         created() {
             // this.products = products;
-            this.products = [...products];
+            // this.products = [...products];
         },
     });
     app.mount('#app');
