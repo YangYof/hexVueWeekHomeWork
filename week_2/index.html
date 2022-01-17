@@ -4,19 +4,120 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <title>week_2</title>
+    <style>
+        .temp>img{
+            height: 13rem;
+        }
+        .tmpeImages>li{
+            display: inline-block;
+        }
+        .tmpeImages>li>img{
+            height: 9rem;
+        }
+    </style>
 </head>
 <body id='app'>
-    
+    <div class="container">
+        <div class="row d-flex justify-content-center mt-4">
+            <div class="col-6">
+                <h2>產品列表</h2>
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">產品名稱</th>
+                            <th scope="col">原價</th>
+                            <th scope="col">售價</th>
+                            <th scope="col" class="text-center">是否啟用</th>
+                            <th scope="col" class="text-center">查看細節</th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        <!-- category: "測試分類"
+                        content: "測試的說明3"
+                        description: "測試的描述2"
+                        id: "-MtVn5tTsjxhv6Cl6bNv"
+                        imageUrl: "https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=621e8231a4e714c2e85f5acbbcc6a730&auto=format&fit=crop&w=1352&q=80"
+                        imagesUrl: (5) ['https://images.unsplash.com/photo-1516627145497-ae…8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1924&q=80', 'https://images.unsplash.com/photo-1587300003388-59…8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80', 'https://images.unsplash.com/photo-1517331156700-3c…8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1948&q=80', 'https://images.unsplash.com/photo-1617093727343-37…8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80', 'https://images.unsplash.com/photo-1511914265872-c4…8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1867&q=80']
+                        is_enabled: 1
+                        origin_price: 1000
+                        price: 500
+                        title: "測試的產品1"
+                        unit: "單位" -->
+                        <tr v-for="item in products" :key="item.id">
+                            <td>{{item.title}}</td>
+                            <td>{{item.origin_price}}</td>
+                            <td>{{item.price}}</td>
+                            <td class="text-center">
+                                <span v-if="item.is_enabled" class="text-success">已啟用</span>
+                                <span v-else>未啟用</span>
+                            </td>
+                            <td class="text-center">
+                                <button 
+                                    type="button" 
+                                    class="btn btn-primary"
+                                    @click="temp = item"
+                                    
+                                    >查看細節</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span>目前有<strong>{{products.length}}</strong> 項產品</span>
+            </div>
+            <div class="col-6">
+                <h2>單一產品細節</h2>
+                    <div class="row" v-if="temp.title">
+                        <div class="temp border rounded p-3 text-center">
+                            <img :src="temp.imageUrl" alt="food photo" class="m-auto">
+                            <div class="productContent text-start mt-3">
+                                <h5>{{temp.title}}<span class="badge bg-primary fs-6 ms-2">{{temp.category}}</span> </h4>
+                                <p>產品描述：{{temp.category}}</p>
+                                <p>產品內容：{{temp.category}}</p>
+                                <span class="fw-bold fs-5">{{temp.price}} <del class="text-black-50">{{temp.origin_price}}</del>元</span>
+                            </div>
+                        </div>
+                        <ul class="row list-unstyled row-cols-4 gy-3">
+                            <li class="col" v-for="(img,index) in temp.imagesUrl" >
+                                <img class="img-fluid" :src="temp.imagesUrl[index]" :alt="temp.title">
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-else>
+                        請選擇一個商品查看
+                    </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script type="module">
     import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.esm-browser.prod.min.js';
     const app = createApp({
         data(){
             return{
-                
+                apiUrl:'https://vue3-course-api.hexschool.io/',
+                apiPath:'yofyang',
+                products:[],
+                temp:{}
             }
         },
+        methods: {
+            getproducts(){
+                axios.get(`${this.apiUrl}/v2/api/${this.apiPath}/products/all`)
+                    .then(response=>{
+                        // console.log(response.data);
+                        this.products = [...response.data.products];
+                    })
+                    .catch(error=>{
+                        console.log(error);
+                    })
+            },
+        },
+        mounted() {
+            this.getproducts();
+        }
     })
     app.mount('#app');
 </script>
