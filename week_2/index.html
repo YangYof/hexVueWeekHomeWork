@@ -17,17 +17,35 @@
         .tmpeImages>li>img{
             height: 9rem;
         }
+        .fadeBtn-enter-active,.fadeBtn-leave-active{
+            transition: all .5s ease;
+        }
+        .fadeBtn-enter-from,.fadeBtn-leave-to{
+            opacity: 0;
+            transform:translate(20px,0);
+        }
+        /* {
+            opacity: 0;
+            transform:translate(0,-20px);
+        } */
     </style>
 </head>
 <body id='app'>
-    <div class="container">
+    <div class="container container-md">
         <div class="row d-flex justify-content-center mt-4">
             <div class="row">
                 <div class="col text-end">
-                    <input class="btn btn-primary" type="button" @click="logout" value="登出">
+                    <transition name="fadeBtn" mode="out-in">
+                        <button v-if="logoutBtn" @click="logout" class="btn btn-primary" type="button">
+                            登出
+                        </button>
+                        <button v-else class="btn btn-danger" type="button">
+                            已登出...
+                        </button>
+                    </transition>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6 ">
                 <h2>產品列表</h2>
                 <table class="table table-hover align-middle">
                     <thead>
@@ -72,7 +90,7 @@
                 </table>
                 <span>目前有<strong>{{products.length}}</strong> 項產品</span>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6 mt-4 col-md-0">
                 <h2>單一產品細節</h2>
                     <div class="row" v-if="temp.title">
                         <div class="temp border rounded p-3 text-center">

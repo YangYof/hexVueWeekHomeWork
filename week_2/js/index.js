@@ -1,4 +1,3 @@
-
 import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.esm-browser.prod.min.js';
     const app = createApp({
         data(){
@@ -7,7 +6,7 @@ import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.e
                 apiPath:'yofyang',
                 products:[],
                 temp:{},
-                logoutBtn:false,
+                logoutBtn:true,
             }
         },
         methods: {
@@ -22,11 +21,11 @@ import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.e
                     })
             },
             logout(){
+                this.logoutBtn = false
                 axios.post(`${this.apiUrl}/v2/logout`)
                     .then(response=>{
                         if(response.data.success){
                             parent.window.location.replace('./login.html');
-                            alert(response.data.message);
                         }
                     })
                     .catch(error=>{
