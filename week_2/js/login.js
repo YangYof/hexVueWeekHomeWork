@@ -7,7 +7,8 @@ import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.e
                 user:{
                     username:'',
                     password:''
-                }
+                },
+                hintAlert:'',
             }
         },
         methods: {
@@ -16,15 +17,14 @@ import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.e
                 .then(response=>{
                     console.log(response.data);
                     if(response.data.success){
+                        this.hintAlert = '0';
                         const {token, expired} = response.data;
-                        parent.window.location.replace('./index.html');
                         document.cookie = `yofyang=${token}; expires=${new Date(expired)};`;
-                        alert('登入成功');
+                        parent.window.location.replace('./index.html');
                     }
                 })
                 .catch(error=>{
-                    console.log(error.message);
-                    alert('帳號或密碼輸入錯誤');
+                    this.hintAlert = '1';
                 })
             }
         }

@@ -35,6 +35,8 @@
                             autocomplete="off"
                             placeholder="請輸入密碼">
                     </div>
+                    <span v-if="hintAlert == '1'" class="alert alert-danger">帳號或密碼輸入錯誤</span>
+                    <span v-else-if="hintAlert == '0'" class="alert alert-success">登入成功</span>
                     <button type="submit" class="btn btn-primary" @click.prevent="login">登入</button>
                 </form>
             </div>

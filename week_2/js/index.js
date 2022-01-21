@@ -1,3 +1,4 @@
+
 import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.esm-browser.prod.min.js';
     const app = createApp({
         data(){
@@ -5,7 +6,8 @@ import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.e
                 apiUrl:'https://vue3-course-api.hexschool.io',
                 apiPath:'yofyang',
                 products:[],
-                temp:{}
+                temp:{},
+                logoutBtn:false,
             }
         },
         methods: {
@@ -56,4 +58,5 @@ import {createApp} from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.e
             this.checkLoginStatus();
         },
     })
+    app.config.devtools = true;
     app.mount('#app');
