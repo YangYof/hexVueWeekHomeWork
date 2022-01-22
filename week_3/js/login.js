@@ -7,7 +7,7 @@ const app = Vue.createApp({
                 username:'',
                 password:''
             },
-            loginError:false
+            loginError:''
         }
     },
     methods:{
@@ -17,16 +17,15 @@ const app = Vue.createApp({
                     if(res.data.success){
                         const {token , expired} = res.data;
                         document.cookie = `yofyang=${token}; expired = ${new Date(expired)};`;
+                        this.loginError = '0';
                         this.logBtn();
-                        setTimeout(() => {
-                            window.location.replace('./products.html')
-                        }, 800);
+                        setTimeout(() => {window.location.replace('./products.html')}, 800);
                     }
                 })
                 .catch(err=>{
-                    this.loginError = true;
+                    this.loginError = '1';
                     setTimeout(() => {
-                        this.loginError = false;
+                        this.loginError = '';
                     }, 3000);
                 })
         },
