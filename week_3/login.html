@@ -5,10 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <title>Login-Page</title>
 </head>
-<body id="app">
+<style>
     
+</style>
+<body>
+    <div id="app">
+        <div class="container position-relative mt-5">
+            <span v-if="loginError" class="alert alert-danger position-absolute top-0 start-50 translate-middle" role="alert">帳號或密碼輸入錯誤</span>
+            <div class="row d-flex justify-content-center">
+                <div class="col-11 col-lg-4">
+                    <form class="row border border-light shadow py-4 px-3">
+                        <h2 class="text-center text-primary">請登入</h2>
+                        <div class="col-12">
+                            <label class="col-form-label " for="username">使用者帳號：</label>
+                        </div>
+                        <div class="col-12">
+                            <input 
+                            class="form-control"
+                            type="text" 
+                            placeholder="請輸入帳號"
+                            v-model="user.username"
+                            name="username">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label 
+                            class="col-form-label"
+                            for="password">使用者密碼：</label>
+                        </div>
+                        <div class="col-12">
+                            <input 
+                            class="form-control"
+                            v-model="user.password"
+                            type="password" 
+                            placeholder="請輸入密碼" 
+                            autocomplete="off"
+                            name="password">
+                        </div>
+                        <div class="col-12 d-grid mt-4">
+                            <input 
+                            ref="loginBtn"
+                            class="btn btn-primary "
+                            type="button" 
+                            value="登入"
+                            @click="login"
+                            >
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-<script src="js/index.js"></script>
+<script type="module">
+    import './js/login.js'
+</script>
 </html>
