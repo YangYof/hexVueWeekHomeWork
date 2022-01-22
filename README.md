@@ -10,7 +10,7 @@ https://yangyof.github.io/hexVueWeekHomeWork/week_2/login.html;
 
 --
 
-Week 2 :
+Week 3 :
 https://yangyof.github.io/hexVueWeekHomeWork/week_3/login.html;
 
 --
