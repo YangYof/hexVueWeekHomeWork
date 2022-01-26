@@ -47,11 +47,11 @@
                             name="password">
                         </div>
                         <div class="col-12 d-grid">
-                            <span v-if="loginError == '1'" class="alert alert-danger" role="alert">
+                            <span v-if="loginError === '1'" class="alert alert-danger" role="alert">
                                 <i class="far fa-times-circle"></i>
                                 帳號或密碼輸入錯誤
                             </span>
-                            <span v-if="loginError == '0'" class="alert alert-success" role="alert">
+                            <span v-if="loginError === '0'" class="alert alert-success" role="alert">
                                 <i class="fas fa-check-circle"></i>
                                 登入成功
                             </span>
