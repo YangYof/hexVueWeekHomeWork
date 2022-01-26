@@ -11,7 +11,8 @@ const app = Vue.createApp({
             tempProduct: {
                 imagesUrl: [],
             },
-            modalTitle:'新增產品'
+            modalTitle:'新增產品',
+            imagesSrc:''
         }
     },
     mounted() {
@@ -37,14 +38,12 @@ const app = Vue.createApp({
         },
         isOpenModal(status, product){
             if(status === 'new'){
-                this.tempProduct = {
-                    imagesUrl:[]
-                };
-                // console.log(status)
+                this.tempProduct = {};
                 this.isNew = true;
                 productModal.show();
             }else if(status === 'edit'){
                 this.tempProduct = {...product};
+                !Array.isArray(this.tempProduct.imagesUrl) ? this.tempProduct.imagesUrl = [] : false ;
                 this.modalTitle = this.tempProduct.title;
                 this.isNew = false;
                 productModal.show();
@@ -92,6 +91,11 @@ const app = Vue.createApp({
                 .catch(err=>{
                     parent.window.location.replace('./login.html');
                 })
+        },
+        addImages(src){
+            // console.log(src);
+            this.tempProduct.imagesUrl.push(src);
+            this.imagesSrc = ''
         },
         previewImage(e) { 
             const file = e.target.files[0];

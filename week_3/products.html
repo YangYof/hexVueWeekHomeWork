@@ -107,19 +107,27 @@
                             </div> -->
                             <div class="col-4">
                                 <label for="image" class="form-label">主要圖片</label>
-                                <!-- <img :src="tempProduct.imageUrl" :value="tempProduct.imageUrl" class="img-fluid mb-3" alt="mainUpateImage"> -->
-                                <input type="text" class="form-control mb-3" name="image" placeholder="請輸入圖片連結">
+                                <img v-if="tempProduct.imageUrl" :src="tempProduct.imageUrl"  class="img-fluid mb-3" alt="mainUpateImage">
+                                <input 
+                                    type="text" 
+                                    class="form-control mb-3" 
+                                    v-model="tempProduct.imageUrl" 
+                                    name="image" 
+                                    placeholder="請輸入圖片連結">
                                 <label for="images" class="fs-4 fw-bold mb-3">多圖新增</label>
-                                <div class="d-grid">
-                                    <label for="imageUrl" class="form-label">圖片網址</label>
-                                    <input type="text" 
-                                        class="form-control mb-3" 
-                                        name="imageUrl"
-                                        placeholder="請輸入圖片連結">
-                                    <input type="button" class="btn btn-outline-danger"value="刪除圖片">
+                                <div class="d-grid" v-if="Array.isArray(tempProduct.imagesUrl)">
+                                    <div v-for="(image, index) in tempProduct.imagesUrl" :key="index">
+                                        <img :src="tempProduct.imagesUrl[index]" alt="" class="img-fluid mb-1">
+                                        <input type="text" 
+                                            class="form-control mb-3"
+                                            :value="tempProduct.imagesUrl[index]">
+                                    </div>
+                                    
                                 </div>
                                 <div class="d-grid">
-                                    <input type="button" class="btn btn-outline-primary" value="新增圖片">
+                                    <input type="text" class="form-control mb-3"  v-model="imagesSrc" placeholder="請輸入圖片連結">
+                                    <input type="button" class="btn btn-outline-primary mb-2" @click="addImages(imagesSrc)" value="新增圖片">
+                                    <input type="button" class="btn btn-outline-danger" @click="tempProduct.imagesUrl.pop()" value="刪除圖片">
                                 </div>
                             </div>
                             <div class="col-8">
