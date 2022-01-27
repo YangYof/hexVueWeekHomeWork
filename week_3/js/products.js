@@ -12,7 +12,7 @@ const app = Vue.createApp({
                 imagesUrl: [],
             },
             modalTitle:'新增產品',
-            imagesSrc:''
+            imagesSrc:'',
         }
     },
     mounted() {
@@ -38,7 +38,9 @@ const app = Vue.createApp({
         },
         isOpenModal(status, product){
             if(status === 'new'){
-                this.tempProduct = {};
+                this.tempProduct = {
+                    imagesUrl: [],
+                };
                 this.isNew = true;
                 productModal.show();
             }else if(status === 'edit'){
@@ -97,29 +99,17 @@ const app = Vue.createApp({
             this.tempProduct.imagesUrl.push(src);
             this.imagesSrc = ''
         },
-        previewImage(e) { 
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            // console.log(reader);
-            if(e.target.files[0]){
-                reader.addEventListener('load',(e)=>{this.tempProduct.imageUrl = e.target.result;});
-                reader.readAsDataURL(file);
-            }
-        },
-        fileSelected(e){
-            this.tempProduct.imagesUrl = [] ;
-            const file = e.target.files;
-            [].forEach.call(file, this.fileReader);
-        },
-        fileReader(file){
-            const reader = new FileReader();
-            reader.addEventListener('load',(e)=>{
-                this.tempProduct.imagesUrl.push(e.target.result);
-            });
-            reader.readAsDataURL(file);
-        },
-        deleteUpdateImg(){
-            this.tempProduct.imagesUrl = [];
+        logout(){
+            axios.post(`${this.apiUrl}/logout`)
+                .then(res=>{
+                    this.$refs.logoutBtn.classList.remove("btn-danger");
+                    this.$refs.logoutBtn.classList.add("btn-secondary");
+                    this.$refs.logoutBtn.value = "登出中...";
+                    setTimeout(() => {window.location.replace('./login.html')}, 800);
+                })
+                .catch(err=>{
+                    parent.window.location.replace('./login.html');
+                })
         }
     },
     
