@@ -13,6 +13,7 @@ const app = Vue.createApp({
             },
             modalTitle:'新增產品',
             imagesSrc:'',
+            tableFadeIn:false
         }
     },
     mounted() {
@@ -24,6 +25,10 @@ const app = Vue.createApp({
         deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'), {
             keyboard: false
         });
+        setTimeout(() => {
+            this.tableFadeIn = true
+        }, 800);
+        
     },
     methods:{
         getproducts(){
@@ -64,7 +69,7 @@ const app = Vue.createApp({
             }
             axios[method](url, {data:this.tempProduct})
                 .then(res=>{
-                    console.log(res);
+                    // console.log(res);
                     productModal.hide();
                     this.getproducts();
                 })
@@ -105,14 +110,36 @@ const app = Vue.createApp({
                     this.$refs.logoutBtn.classList.remove("btn-danger");
                     this.$refs.logoutBtn.classList.add("btn-secondary");
                     this.$refs.logoutBtn.value = "登出中...";
+                    // this.tableFadeIn = false;
                     setTimeout(() => {window.location.replace('./login.html')}, 800);
                 })
                 .catch(err=>{
-                    parent.window.location.replace('./login.html');
+                    console.log(err);
                 })
-        }
-    },
-    
+        },
+        // beforeEnter(el){
+        //     el.style.opacity=0;
+        //     el.style.transform = 'translateY(20px)'
+        // },
+        // enter(el,done){
+        //     gsap.to(el,{
+        //         opacity:1,
+        //         y:0,
+        //         duration:0.3,
+        //         onComplete:done,
+        //         delay: el.dataset.index * 0.15,
+        //     })
+        // },
+        // leave(el,done){
+        //     gsap.to(el,{
+        //         opacity:0,
+        //         y:20,
+        //         duration:0.8,
+        //         onComplete:done,
+        //         delay: el.dataset.index * 0.15,
+        //     })
+        // }
+    }
 })
 
 app.mount('#app')
