@@ -3,8 +3,8 @@
 const app = Vue.createApp({
     data(){
         return{
-            api_url:'https://vue3-course-api.hexschool.io/v2',
-            api_path:'yofyang',
+            apiUrl:`https://vue3-course-api.hexschool.io/`,
+            apiPath:'yofyang',
             user:{
                 username:'',
                 password:''
@@ -13,14 +13,19 @@ const app = Vue.createApp({
     },
     methods: {
         login(){
-            console.log(this.user);
-            // axios.get('')
-            //     .then(res=>{
-
-            //     })
-            //     .catch(err=>{
-
-            //     })
+            // /v2/admin/signin
+            axios.post(`${this.apiUrl}/v2/admin/signin`, this.user)
+                .then(response=>{
+                    console.log(response.data);
+                    if(response.data.success){
+                        let {expired, token} = response.data;
+                        document.cookie =`yofyang=${token}; expired=${new Date(expired)};`;
+                        window.location.replace('./products.html')
+                    }
+                })
+                .catch(error=>{
+                    console.log(error);
+                })
         }
     },
     mounted() {
