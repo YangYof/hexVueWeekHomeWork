@@ -11,8 +11,12 @@ const app = Vue.createApp({
             api_url:'https://vue3-course-api.hexschool.io/v2',
             api_path:'yofyang',
             products:[],
+            tempProduct:{
+                imagesUrl:[]
+            },
             pagination:{},
             modalTitle:'Modal title',
+            isNew:false,
         }
     },
     components:{
