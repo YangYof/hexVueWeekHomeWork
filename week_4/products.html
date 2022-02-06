@@ -9,53 +9,153 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <title>Products</title>
 </head>
 <body>
     <div id="app">
         <div class="container">
             <div class="row">
-                <div class="col-12 bg-light text-end py-3 pe-3">
-                    <input type="button" class="btn btn-danger" value="登出">
-                </div>
-                <div class="col-12 text-end">
-                    <input type="button" class="btn btn-primary" value="新增產品">
+                <div class="col-12 bg-light py-3 px-3 d-flex justify-content-between col">
+                    <input type="button" class="btn btn-primary" @click="openModal('new')" value="新增產品">
+                    <input type="button" class="btn btn-danger" @click="logout" value="登出">
                 </div>
                 <div class="col-12">
-                    <table class="table">
+                    <table class="table table-hover table-striped align-middle">
                         <thead>
                             <tr>
                                 <!-- 分類	產品名稱	原價	售價	是否啟用	編輯 -->
                                 <td>#</td>
                                 <td>分類</td>
                                 <td>產品名稱</td>
-                                <td>原價</td>
-                                <td>售價</td>
-                                <td>是否啟用</td>
-                                <td>編輯</td>
+                                <td width="140">原價</td>
+                                <td width="140">售價</td>
+                                <td width="100" class="text-center">是否啟用</td>
+                                <td width="140" class="text-center">編輯</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>123</td>
-                                <td>456</td>
-                                <td>789</td>
-                                <td>123</td>
-                                <td>
-                                    <span>啟用</span>
-                                    <span>未啟用</span>
+                            <tr v-for="(item, index) in products" :key="item.id">
+                                <td>{{index+1}}</td>
+                                <td>{{item.category}}</td>
+                                <td>{{item.title}}</td>
+                                <td>{{item.origin_price}}</td>
+                                <td>{{item.price}}</td>
+                                <td class="text-center">
+                                    <span v-if="item.is_enabled" class="text-success">啟用</span>
+                                    <span v-else>未啟用</span>
                                 </td>
                                 <td>
-                                    <input type="button" value="編輯">
-                                    <input type="button" value="刪除">
+                                    <input type="button" class="btn btn-outline-primary me-2" @click="openModal('edit', item)" value="編輯">
+                                    <input type="button" class="btn btn-outline-danger" @click="openModal('delete', item)" value="刪除">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <!--Pagination-->
+                <pagination :pagination = pagination @getpage="getProducts"></pagination>
             </div>
         </div>
+        
+        <!--Product Modal -->
+        <productmodal :temp-product="tempProduct" :is-new="isNew" :modal-title="modalTitle" :update-product-btn-text="updateProductBtnText" @get-products="getProducts"></productmodal>
+        <!-- <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">{{modalTitle}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="form-label" for="image">主要圖片</label>
+                                <img :src="tempProduct.imageUrl" class="img-fluid" alt="">
+                                <input type="text" 
+                                    ref="image" 
+                                    class="form-control" 
+                                    id="image" 
+                                    name="image"
+                                    v-model="tempProduct.imageUrl"
+                                    placeholder="請輸入圖片連結">
+                                <h2>多圖新增</h2>
+                                
+                                <div v-if="Array.isArray(tempProduct.imagesUrl)">
+                                    <div v-for="(image,i) in tempProduct.imagesUrl">
+                                        <input type="text" class="form-control" v-model="tempProduct.imagesUrl[i]"
+                                        id="images" name="images" placeholder="請輸入圖片連結">
+                                        <img :src="tempProduct.imagesUrl[i]" class="img-fluid">
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <input class="btn btn-outline-primary mb-2" type="button" value="新增圖片" @click="tempProduct.imagesUrl.push('')">
+                                    <input class="btn btn-outline-danger" type="button" value="刪除最後一張圖片" @click="tempProduct.imagesUrl.pop('')">
+                                </div>
+                                
+                            </div>
+                            <div class="col-8">
+                                <label for="title" class="form-label">標題</label>
+                                <input type="text" v-model="tempProduct.title" class="form-control" name="title" id="title" placeholder="請輸入標題">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="category" class="form-label">分類</label>
+                                        <input name="category" v-model="tempProduct.category" type="text" class="form-control" placeholder="請輸入分類">
+                                        <label for="unit" class="form-label">單位</label>
+                                        <input name="unit" v-model="tempProduct.unit" type="text" class="form-control" placeholder="請輸入單位">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="origin_price" class="form-label">原價</label>
+                                        <input name="origin_price" v-model.number="tempProduct.origin_price" type="text" class="form-control" placeholder="請輸入原價">
+                                        <label for="price" class="form-label">售價</label>
+                                        <input name="price" v-model.number="tempProduct.price" type="text" class="form-control" placeholder="請輸入售價">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="description" class="form-label" >產品描述</label>
+                                        <textarea name="description" v-model="tempProduct.description" class="form-control" id="description"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="content" class="form-label">說明內容</label>
+                                        <textarea name="content" v-model="tempProduct.content" class="form-control" id="content"></textarea>
+                                    </div>
+                                </div>
+                                <input name="is_enabled" v-model="tempProduct.is_enabled" :true-value="1" :false-value="0" type="checkbox" class="form-check-input">
+                                <label for="is_enabled" class="form-check-label">是否開啟</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" @click="updateProduct">確認</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        
+        <!--Delete Modal-->
+        <!-- <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProductModalLabel">{{tempProduct.title}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        {{tempProduct.title}}
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <deleteproduct :temp-product="tempProduct" @delete-product="getProducts"></deleteproduct>
     </div>
 </body>
 <script type="module">
