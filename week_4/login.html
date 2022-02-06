@@ -22,7 +22,7 @@
 <body>
     <div id="app">
         <div class="container d-flex justify-content-center align-items-center">
-            <form action="" class="col-4">
+            <form class="col-4">
                 <h2 class="text-primary mb-3">請登入</h2>
                 <div class="row mb-3">
                     <div class="col">
@@ -38,7 +38,7 @@
                 </div>
                 <div class="row">
                     <div class="col d-grid">
-                        <input @click="login" class="btn btn-primary" type="button" value="登入">
+                        <input type="button" class="btn btn-primary" value="登入" v-on:click="login">
                     </div>
                 </div>
                 
