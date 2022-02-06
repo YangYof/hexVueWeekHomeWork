@@ -16,17 +16,15 @@ const app = Vue.createApp({
             console.log(this.user);
             axios.post(`${this.api_url}/admin/signin`, this.user)
                 .then(res=>{
-                    console.log(res.data.success);
+                    let {token,expired} = res.data
+                    document.cookie = `yofyang=${token};expired=${new Date(expired)}`;
                     res.data.success ? window.location.replace('./products.html') : false ;
                 })
                 .catch(err=>{
-
+                    console.log(err);
                 })
         }
-    },
-    mounted() {
-        
-    },
+    }
 });
 
 app.mount('#app');
