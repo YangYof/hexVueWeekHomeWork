@@ -1,8 +1,13 @@
-import pagination from './pagination.js'
+import deleteproduct from './deleteproduct.js';
+import pagination from './pagination.js';
+import productmodal from './productmodal.js';
+
 let productModal = {};
+let deleteProductModal = {};
+
 const app = Vue.createApp({
     components:{
-        pagination
+        pagination,productmodal,deleteproduct
     },
     data(){
         return{
@@ -25,7 +30,9 @@ const app = Vue.createApp({
                 .then(response=>{
                     this.products = [...response.data.products];
                     this.pagination = {...response.data.pagination};
-                    console.log(this.pagination );
+                    productModal.hide();
+                    deleteProductModal.hide();
+                    // console.log(this.pagination );
                 })
                 .catch(error=>{
                     console.log(error);
@@ -46,23 +53,23 @@ const app = Vue.createApp({
                     window.location.replace('./login.html')
                 })
         },
-        updateProduct(){
-            let url=`${this.apiUrl}/api/${this.apiPath}/admin/product`;
-            let httpMethods = 'post';
-            if(this.isNew = false){
-                url=`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
-                methods = 'put';
-            }
-            axios[httpMethods](url,{data:this.tempProduct})
-                .then(response=>{
-                    console.log(response);
-                    this.getProducts();
-                    productModal.hide();
-                })
-                .catch(error=>{
-                    console.log(error);
-                })
-        },
+        // updateProduct(){
+        //     let url=`${this.apiUrl}/api/${this.apiPath}/admin/product`;
+        //     let httpMethods = 'post';
+        //     if(this.isNew = false){
+        //         url=`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
+        //         httpMethods = 'put';
+        //     }
+        //     axios[httpMethods](url,{data:this.tempProduct})
+        //         .then(response=>{
+        //             console.log(response);
+        //             this.getProducts();
+        //             productModal.hide();
+        //         })
+        //         .catch(error=>{
+        //             console.log(error);
+        //         })
+        // },
         // updateImage(){
         //     let photo = this.$refs.image.files[0];
         //     let formData = new FormData;
@@ -86,22 +93,28 @@ const app = Vue.createApp({
                     imagesUrl:[]
                 };
                 this.isNew = true;
+                this.modalTitle = '新增產品';
+                this.updateProductBtnText='新增產品';
                 productModal.show();
             }else if(state=="edit"){
                 this.tempProduct = product;
                 this.tempProduct.imagesUrl = [];
                 this.isNew = false;
-                this.updateProductBtnText='編輯產品',
+                this.updateProductBtnText='編輯產品';
                 this.modalTitle = product.title;
                 productModal.show();
+            }else if(state=="delete"){
+                this.tempProduct = product;
+                this.modalTitle = product.title;
+                // this.tempProduct.imagesUrl = [];
+                deleteProductModal.show();
             }
             
         }
     },
     mounted() {
-        productModal = new bootstrap.Modal(document.getElementById('productModal'), {
-            keyboard: false
-        })
+        productModal = new bootstrap.Modal(document.getElementById('productModal'))
+        deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'))
         this.loginStatus();
         this.getProducts();
     },
