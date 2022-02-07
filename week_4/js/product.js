@@ -1,9 +1,9 @@
+let productModal = {};
+let deleteProductModal = {};
+
 import pagination from './components/pagination.js';
 import deleteproductmodal from './components/deleteproductmodal.js';
 import productmodal from './components/productmodal.js';
-
-let productModal = {};
-let deleteProductModal = {};
 
 const app = Vue.createApp({
     data(){
@@ -18,9 +18,6 @@ const app = Vue.createApp({
             modalTitle:'Modal title',
             isNew:false,
         }
-    },
-    components:{
-        pagination,deleteproductmodal,productmodal
     },
     methods: {
         loginStatus(){
@@ -40,23 +37,41 @@ const app = Vue.createApp({
                 .then(res=>{
                     this.products = res.data.products;
                     this.pagination = res.data.pagination;
-                    console.log(this.pagination);
+                    // console.log(this.pagination);
+                    deleteProductModal.hide();
+                    productModal.hide();
                 })
                 .catch(err=>{
                     console.log(err);
                 })
         },
-        openModal(){
-            productModal.show();
+        openModal(status, product){
+            if(status == 'new'){
+                this.tempProduct = {
+                    imagesUrl:[],
+                };
+                this.isNew = true;
+                productModal.show();
+            }else if(status == 'edit'){
+                this.tempProduct = {...product};
+                this.tempProduct.imagesUrl = [];
+                this.isNew = false;
+                productModal.show();
+            }else if(status == 'delete'){
+                this.tempProduct = {...product};
+                deleteProductModal.show();
+            }
+            
         }
     },
     mounted() {
         this.loginStatus();
         this.getProducts();
-        productModal = new bootstrap.Modal(document.getElementById('productModal'), {
-            keyboard: false
-        });
-        
+        productModal = new bootstrap.Modal(document.getElementById('productModal'));
+        deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
+    },
+    components:{
+        pagination,deleteproductmodal,productmodal
     },
 })
 
