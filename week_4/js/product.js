@@ -5,119 +5,89 @@ import productmodal from './productmodal.js';
 let productModal = {};
 let deleteProductModal = {};
 
+import pagination from './components/pagination.js';
+import deleteproductmodal from './components/deleteproductmodal.js';
+import productmodal from './components/productmodal.js';
+
 const app = Vue.createApp({
     components:{
-        pagination,productmodal,deleteproduct
+        pagination,deleteproductmodal,productmodal
     },
     data(){
         return{
-            apiUrl:`https://vue3-course-api.hexschool.io/v2`,
-            apiPath:'yofyang',
+            api_url:'https://vue3-course-api.hexschool.io/v2',
+            api_path:'yofyang',
             products:[],
             tempProduct:{
                 imagesUrl:[]
             },
             pagination:{},
             modalTitle:'新增產品',
-            updateProductBtnText:'新增產品',
             isNew:false,
+            productModal:null,
         }
     },
     methods: {
-        getProducts(page=1){
-            // https://vue3-course-api.hexschool.io/v2/api/yofyang/admin/products?page=1
-            axios.get(`${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`)
-                .then(response=>{
-                    this.products = [...response.data.products];
-                    this.pagination = {...response.data.pagination};
-                    productModal.hide();
-                    deleteProductModal.hide();
-                    // console.log(this.pagination );
-                })
-                .catch(error=>{
-                    console.log(error);
-                })
-        },
         loginStatus(){
             const token = document.cookie.replace(/(?:(?:^|.*;\s*)yofyang\s*=\s*([^;]*).*$)|^.*$/, '$1');
             axios.defaults.headers.common.Authorization = `${token}`;
-            axios.post(`${this.apiUrl}/api/user/check`)
-                .then(response=>{
-                    // console.log(response);
-                    if(!response.data.success){
-                        window.location.replace('./login.html')
-                    }
+            axios.post(`${this.api_url}/api/user/check`)
+                .then(res=>{
+                    !res.data.success ? window.location.replace('./login.html') : false ;
                 })
-                .catch(error=>{
-                    console.log(error);
+                .catch(err=>{
+                    alert('驗證錯誤，請重新輸入帳號密碼')
                     window.location.replace('./login.html')
                 })
         },
-        // updateProduct(){
-        //     let url=`${this.apiUrl}/api/${this.apiPath}/admin/product`;
-        //     let httpMethods = 'post';
-        //     if(this.isNew = false){
-        //         url=`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
-        //         httpMethods = 'put';
-        //     }
-        //     axios[httpMethods](url,{data:this.tempProduct})
-        //         .then(response=>{
-        //             console.log(response);
-        //             this.getProducts();
-        //             productModal.hide();
-        //         })
-        //         .catch(error=>{
-        //             console.log(error);
-        //         })
-        // },
-        // updateImage(){
-        //     let photo = this.$refs.image.files[0];
-        //     let formData = new FormData;
-        //     formData.append('photo',)
-        // },
-        logout(){
-            axios.post(`${this.apiUrl}/logout`)
-                .then(response=>{
-                    console.log(response);
-                    if(response.data.success){
-                        window.location.replace('./login.html')
-                    }
+        getProducts(page=1){
+            // https://vue3-course-api.hexschool.io/v2/api/yofyang/admin/products?page=1
+            axios.get(`${this.api_url}/api/${this.api_path}/admin/products?page=${page}`)
+                .then(res=>{
+                    this.products = res.data.products;
+                    this.pagination = res.data.pagination;
                 })
-                .catch(error=>{
-                    console.log(error);
+                .catch(err=>{
+                    console.log(err);
                 })
         },
-        openModal(state, product){
-            if(state=="new"){
+        openModal(status, product){
+            if(status == 'new'){
                 this.tempProduct = {
-                    imagesUrl:[]
+                    imagesUrl:[],
                 };
-                this.isNew = true;
                 this.modalTitle = '新增產品';
-                this.updateProductBtnText='新增產品';
-                productModal.show();
-            }else if(state=="edit"){
-                this.tempProduct = product;
+                this.isNew = true;
+                this.$refs.productModal.showModal()
+            }else if(status == 'edit'){
+                this.tempProduct = {...product};
                 this.tempProduct.imagesUrl = [];
+                this.modalTitle = this.tempProduct.title
                 this.isNew = false;
-                this.updateProductBtnText='編輯產品';
-                this.modalTitle = product.title;
-                productModal.show();
-            }else if(state=="delete"){
-                this.tempProduct = product;
-                this.modalTitle = product.title;
-                // this.tempProduct.imagesUrl = [];
-                deleteProductModal.show();
+                this.$refs.productModal.showModal()
+            }else if(status == 'delete'){
+                this.tempProduct = {...product};
+                this.$refs.deleteProductModal.showModal();
             }
             
+        },
+        logout(){
+            this.$refs.loginOutBtn.value = "登出中..."
+            this.$refs.loginOutBtn.classList.remove('btn-danger');
+            this.$refs.loginOutBtn.classList.add('btn-secondary');
+            axios.post(`${this.api_url}/logout`)
+                .then(res=>{
+                    window.location.replace('./login.html')
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
         }
     },
     mounted() {
-        productModal = new bootstrap.Modal(document.getElementById('productModal'))
-        deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'))
         this.loginStatus();
-        this.getProducts();
-    },
+        this.getProducts();        
+    }
 })
 
 app.mount('#app')

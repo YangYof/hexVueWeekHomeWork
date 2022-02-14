@@ -8,29 +8,39 @@ const app = Vue.createApp({
             user:{
                 username:'',
                 password:''
-            }
+            },
+            loginBtnText:'登入',
+            loginBtnStatus:false,
         }
     },
     methods: {
         login(){
-            // /v2/admin/signin
-            axios.post(`${this.apiUrl}/v2/admin/signin`, this.user)
-                .then(response=>{
-                    console.log(response.data);
-                    if(response.data.success){
-                        let {expired, token} = response.data;
-                        document.cookie =`yofyang=${token}; expired=${new Date(expired)};`;
-                        window.location.replace('./products.html')
-                    }
+            console.log(this.$refs.loginBtn.value);
+            this.loginBtnText = '登入中...';
+            this.$refs.loginBtn.classList.remove('btn-primary');
+            this.$refs.loginBtn.classList.add('btn-secondary');
+            axios.post(`${this.api_url}/admin/signin`, this.user)
+                .then(res=>{
+                    let {token,expired} = res.data
+                    document.cookie = `yofyang=${token};expired=${new Date(expired)}`;
+                    this.loginBtnText = '登入成功';
+                    this.loginBtnStatus = true;
+                    this.$refs.loginBtn.classList.remove('btn-secondary');
+                    this.$refs.loginBtn.classList.add('btn-success');
+                    res.data.success ? window.location.replace('./products.html') : false ;
                 })
-                .catch(error=>{
-                    console.log(error);
+                .catch(err=>{
+                    this.loginBtnText = '請重新輸入帳號密碼';
+                    this.$refs.loginBtn.classList.remove('btn-secondary');
+                    this.$refs.loginBtn.classList.add('btn-danger');
+                    setTimeout(()=>{
+                        this.loginBtnText = '登入';
+                        this.$refs.loginBtn.classList.remove('btn-danger');
+                        this.$refs.loginBtn.classList.add('btn-primary');
+                    },2000)
                 })
         }
-    },
-    mounted() {
-        
-    },
+    }
 });
 
 app.mount('#app');
