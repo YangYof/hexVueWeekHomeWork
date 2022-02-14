@@ -4,7 +4,7 @@ const api_path ='yofyang';
 
 export default{
     template:`
-        <div class="modal fade" ref="modal" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal fade" ref="productModal" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -16,7 +16,7 @@ export default{
                         <div class="row">
                             <div class="col-4">
                                 <label for="image" class="form-label">主要圖片</label>
-                                <img v-if="tempProduct.imageUrl" :src="tempProduct.imageUrl"  class="img-fluid mb-3" alt="mainUpateImage">
+                                <img v-if="tempProduct.imageUrl" :src="tempProduct.imageUrl" class="img-fluid mb-3" alt="mainUpateImage">
                                 <input 
                                     type="file" 
                                     class="form-control mb-3" 
@@ -25,20 +25,18 @@ export default{
                                     @change="updateImg"
                                     placeholder="請輸入圖片連結">
                                 <label for="images" class="fs-4 fw-bold mb-3">多圖新增</label>
-                                <div class="d-grid" v-if="Array.isArray(tempProduct.imagesUrl)">
-                                    <div v-for="(image, index) in tempProduct.imagesUrl" :key="index">
+                                <div class="d-grid">
+                                    <div v-for="(image, index) in tempProduct.imagesUrl" :key="index+1">
                                         <img :src="tempProduct.imagesUrl[index]" class="img-fluid mb-1">
                                         <input type="text" 
                                             class="form-control mb-3"
                                             :value="tempProduct.imagesUrl[index]">
                                     </div>
-                                    <input type="button" class="btn btn-outline-primary mb-2" value="新增圖片">
-                                    <input type="button" class="btn btn-outline-danger" @click="tempProduct.imagesUrl.pop()" value="刪除圖片">
                                 </div>
-                                <div class="d-grid" v-else>
-                                    <input type="text" class="form-control mb-3" v-model="tempProduct.imagesUrl" placeholder="請輸入圖片連結">
-                                    <input type="button" class="btn btn-outline-primary mb-2" @click="tempProduct.imagesUrl.push('')" value="新增圖片">
-                                    <input type="button" class="btn btn-outline-danger" @click="tempProduct.imagesUrl.pop()" value="刪除圖片">
+                                <div class="d-grid">
+                                    <input type="text" class="form-control mb-3" ref="inputImgs" placeholder="請輸入圖片連結">
+                                    <input type="button" class="btn btn-outline-primary mb-2" @click="updateImgs" value="新增圖片">
+                                    <input type="button" class="btn btn-outline-danger" @click="tempProduct.imagesUrl.pop('')" value="刪除圖片">
                                 </div>
                             </div>
                             <div class="col-8">
@@ -85,13 +83,18 @@ export default{
                 </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click="updateProduct">Save changes</button>
+                    <button type="button" class="btn btn-primary" @click="updateProduct">確認</button>
                     </div>
                 </div>
             </div>
         </div>
     `,
     props:["modalTitle","tempProduct","isNew"],
+    data(){
+        return{
+            modal:null,
+        }
+    },
     methods: {
         updateProduct(){
             let httpMethods = 'post';
@@ -103,30 +106,44 @@ export default{
             axios[httpMethods](url,{data:this.tempProduct})
                 .then(res=>{
                     // console.log(res);
-                    this.$emit('getProducts')
-                    // productModal.hide();
+                    this.$emit('getProducts');
+                    this.hideModal();
                 })
                 .catch(err=>{
                     console.log(err);
                 })
         },
         updateImg(){
-            console.log(this.$refs.updateImage.files[0]);
+            // console.log(this.$refs.updateImage.files[0]);
             const file = this.$refs.updateImage.files[0];
             const formData = new FormData();
             formData.append("file-to-upload",file);
             // /v2/api/{api_path}/admin/upload
             axios.post(`${api_url}/api/${api_path}/admin/upload`,formData)
             .then(res=>{
-                console.log(res);
+                // console.log(res);
                 this.tempProduct.imageUrl = res.data.imageUrl;
             })
             .catch(err=>{
                 console.log(err);
             })
+        },
+        updateImgs(){
+            if(!this.$refs.inputImgs.value){
+                return
+            }
+            this.tempProduct.imagesUrl.push(this.$refs.inputImgs.value)
+            this.$refs.inputImgs.value = ''
+        },
+        hideModal(){
+            this.modal.hide();
+        },
+        showModal(){
+            this.modal.show();
         }
     },
     mounted() {
-        // productModal = new bootstrap.Modal(document.getElementById('productModal'));
-    },
+        // console.log(this.$refs.modal);
+        this.modal = new bootstrap.Modal(this.$refs.productModal);
+    }
 }

@@ -1,11 +1,12 @@
-let productModal = {};
-let deleteProductModal = {};
 
 import pagination from './components/pagination.js';
 import deleteproductmodal from './components/deleteproductmodal.js';
 import productmodal from './components/productmodal.js';
 
 const app = Vue.createApp({
+    components:{
+        pagination,deleteproductmodal,productmodal
+    },
     data(){
         return{
             api_url:'https://vue3-course-api.hexschool.io/v2',
@@ -15,8 +16,9 @@ const app = Vue.createApp({
                 imagesUrl:[]
             },
             pagination:{},
-            modalTitle:'Modal title',
+            modalTitle:'新增產品',
             isNew:false,
+            productModal:null,
         }
     },
     methods: {
@@ -25,10 +27,11 @@ const app = Vue.createApp({
             axios.defaults.headers.common.Authorization = `${token}`;
             axios.post(`${this.api_url}/api/user/check`)
                 .then(res=>{
-                    // console.log(res);
+                    !res.data.success ? window.location.replace('./login.html') : false ;
                 })
                 .catch(err=>{
-                    !res.data.success ? window.location.replace('./login.html') : false ;
+                    alert('驗證錯誤，請重新輸入帳號密碼')
+                    window.location.replace('./login.html')
                 })
         },
         getProducts(page=1){
@@ -37,9 +40,6 @@ const app = Vue.createApp({
                 .then(res=>{
                     this.products = res.data.products;
                     this.pagination = res.data.pagination;
-                    // console.log(this.pagination);
-                    deleteProductModal.hide();
-                    productModal.hide();
                 })
                 .catch(err=>{
                     console.log(err);
@@ -50,29 +50,38 @@ const app = Vue.createApp({
                 this.tempProduct = {
                     imagesUrl:[],
                 };
+                this.modalTitle = '新增產品';
                 this.isNew = true;
-                productModal.show();
+                this.$refs.productModal.showModal()
             }else if(status == 'edit'){
                 this.tempProduct = {...product};
                 this.tempProduct.imagesUrl = [];
+                this.modalTitle = this.tempProduct.title
                 this.isNew = false;
-                productModal.show();
+                this.$refs.productModal.showModal()
             }else if(status == 'delete'){
                 this.tempProduct = {...product};
-                deleteProductModal.show();
+                this.$refs.deleteProductModal.showModal();
             }
             
+        },
+        logout(){
+            this.$refs.loginOutBtn.value = "登出中..."
+            this.$refs.loginOutBtn.classList.remove('btn-danger');
+            this.$refs.loginOutBtn.classList.add('btn-secondary');
+            axios.post(`${this.api_url}/logout`)
+                .then(res=>{
+                    window.location.replace('./login.html')
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
         }
     },
     mounted() {
         this.loginStatus();
-        this.getProducts();
-        productModal = new bootstrap.Modal(document.getElementById('productModal'));
-        deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
-    },
-    components:{
-        pagination,deleteproductmodal,productmodal
-    },
+        this.getProducts();        
+    }
 })
 
 app.mount('#app')

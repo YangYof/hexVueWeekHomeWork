@@ -18,13 +18,12 @@
             <div class="row">
                 <div class="col-12 bg-light d-flex justify-content-between p-3">
                     <input type="button" class="btn btn-primary" @click="openModal('new')" value="新增產品">
-                    <input type="button" class="btn btn-danger" value="登出">
+                    <input type="button" class="btn btn-danger" @click="logout" ref="loginOutBtn" value="登出">
                 </div>
                 <div class="col-12 mt-3">
                     <table class="table">
                         <thead>
                             <tr>
-                                <!-- 分類	產品名稱	原價	售價	是否啟用	編輯 -->
                                 <td>#</td>
                                 <td>分類</td>
                                 <td>產品名稱</td>
@@ -36,17 +35,6 @@
                         </thead>
                         <tbody>
                             <tr v-for="(product,i) in products" :key="product.id">
-                                <!-- category: "2"
-                                content: "77ㄉ"
-                                description: "66 dasdasdasd"
-                                id: "-Mv3gz8682F1rghk-j4R"
-                                imageUrl: "https://images.unsplash.com/photo-1516550135131-fe3dcb0bedc7?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=621e8231a4e714c2e85f5acbbcc6a730&auto=format&fit=crop&w=1352&q=80"
-                                is_enabled: 1
-                                num: 1
-                                origin_price: 33
-                                price: 55
-                                title: "1111"
-                                unit: "44" -->
                                 <td>{{i+1}}</td>
                                 <td>{{product.category}}</td>
                                 <td>{{product.title}}</td>
@@ -79,7 +67,11 @@
             @get-products="getProducts"></productmodal>
 
         <!--Delete Product Modal-->
-        <deleteproductmodal :modal-title="modalTitle" :temp-product="tempProduct" @get-products="getProducts"></deleteproductmodal>
+        <deleteproductmodal 
+            ref="deleteProductModal"
+            :modal-title="modalTitle" 
+            :temp-product="tempProduct" 
+            @get-products="getProducts"></deleteproductmodal>
     </div>
 </body>
 <script type="module">
