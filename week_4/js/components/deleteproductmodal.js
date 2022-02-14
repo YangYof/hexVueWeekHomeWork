@@ -49,7 +49,6 @@ export default{
         }
     },
     mounted() {
-        console.log(this.$refs.deleteModal);
         this.modal = new bootstrap.Modal(this.$refs.deleteModal);
     },
 }

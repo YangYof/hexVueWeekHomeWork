@@ -110,7 +110,7 @@ export default{
                     this.hideModal();
                 })
                 .catch(err=>{
-                    console.log(err);
+                    alert('請輸入完整產品訊息')
                 })
         },
         updateImg(){
