@@ -25,7 +25,8 @@ export default{
                                     @change="updateImg"
                                     placeholder="請輸入圖片連結">
                                 <label for="images" class="fs-4 fw-bold mb-3">多圖新增</label>
-                                <div class="d-grid">
+
+                                <div class="d-grid" v-if="Array.isArray(tempProduct.imagesUrl)">
                                     <div v-for="(image, index) in tempProduct.imagesUrl" :key="index+1">
                                         <img :src="tempProduct.imagesUrl[index]" class="img-fluid mb-1">
                                         <input type="text" 
@@ -36,6 +37,8 @@ export default{
                                 <div class="d-grid">
                                     <input type="text" class="form-control mb-3" ref="inputImgs" placeholder="請輸入圖片連結">
                                     <input type="button" class="btn btn-outline-primary mb-2" @click="updateImgs" value="新增圖片">
+                                </div>
+                                <div class="d-grid" v-if="tempProduct.imagesUrl.length >= 1">
                                     <input type="button" class="btn btn-outline-danger" @click="tempProduct.imagesUrl.pop('')" value="刪除圖片">
                                 </div>
                             </div>
@@ -69,6 +72,10 @@ export default{
                                     <div class="col-12">
                                         <label for="content" class="form-label">說明內容</label>
                                         <textarea type="text" v-model="tempProduct.content" class="form-control mb-3" id="content" placeholder="請輸入說明內容"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="content" class="form-label">start</label>
+                                        <textarea type="text" v-model="tempProduct.start" class="form-control mb-3" id="content" placeholder="請輸入說明內容"></textarea>
                                     </div>
                                     <div class="col-5">
                                         <div class="form-check">

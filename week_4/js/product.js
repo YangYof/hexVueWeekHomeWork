@@ -56,7 +56,7 @@ const app = Vue.createApp({
                 this.$refs.productModal.showModal()
             }else if(status == 'edit'){
                 this.tempProduct = {...product};
-                this.tempProduct.imagesUrl = [];
+                // this.tempProduct.imagesUrl = [];
                 this.modalTitle = this.tempProduct.title
                 this.isNew = false;
                 this.$refs.productModal.showModal()
