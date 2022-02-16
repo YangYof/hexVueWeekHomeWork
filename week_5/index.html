@@ -45,14 +45,15 @@
                         </tr>
                     </tbody>
                 </table>
+                
+            </div>
+        </div>
+        <div class="row" v-if="carts.length !== 0">
+            <div class="col">
                 <div class="text-end">
                     <button type="button" class="btn btn-outline-danger" @click="daleteCart('all')">清空購物車</button>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <table class="table align-middle" v-if="carts.length !== 0">
+                <table class="table align-middle" >
                     <thead>
                         <tr>
                             <td></td>
@@ -123,7 +124,7 @@
                 </div>
             </form>
         </div>
-        <modal ref="modal" :temp-product="tempProduct"></modal>
+        <modal ref="modal" :temp-product="tempProduct" @get-cart="getCarts"></modal>
     </div>
 </body>
 <script type="module" src="./js/all.js"></script>

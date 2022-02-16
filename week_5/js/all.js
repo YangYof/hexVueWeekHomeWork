@@ -66,12 +66,10 @@ const app = createApp({
         }
 
         // openModal
-        let tempProduct = reactive({})
+        let tempProduct = ref({})
         let modal = ref(null)
         const openModal = (product)=>{
-            tempProduct = { ...product }
-            console.log(modal.value.$el);
-            console.log(product);
+            tempProduct.value = { ...product }
             modal.value.openModal()
         }
 
@@ -82,7 +80,7 @@ const app = createApp({
         
         return {
             // 商品列表
-            products,
+            products,getCarts,
             // 購物車列表, 購物車總額, 刪除(單ㄧ以及全部)購物車 ,加入(更新)購物車
             carts, totalPrice, daleteCart, updateCart,
             // 單一商品
