@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <title>index</title>
 </head>
+
 <body>
     <div class="container" id="app">
-        
         <div class="row">
             <div class="col">
                 <table class="table align-middle">
@@ -38,14 +42,16 @@
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-primary" @click="openModal(product)">查看更多</button>
-                                    <button type="button" class="btn btn-outline-danger" @click="updateCart('new',product.id,qty=1)">加入購物車</button>
+                                    <button type="button" class="btn btn-outline-primary"
+                                        @click="openModal(product)">查看更多</button>
+                                    <button type="button" class="btn btn-outline-danger"
+                                        @click="updateCart('new',product.id,qty=1)">加入購物車</button>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
         <div class="row" v-if="carts.length !== 0">
@@ -53,7 +59,7 @@
                 <div class="text-end">
                     <button type="button" class="btn btn-outline-danger" @click="daleteCart('all')">清空購物車</button>
                 </div>
-                <table class="table align-middle" >
+                <table class="table align-middle">
                     <thead>
                         <tr>
                             <td></td>
@@ -65,14 +71,14 @@
                     <tbody>
                         <tr v-for="(item, index) in carts" :key="item.id">
                             <td>
-                                <button type="button" class="btn btn-outline-danger" @click="daleteCart('one',item.id)" >
+                                <button type="button" class="btn btn-outline-danger" @click="daleteCart('one',item.id)">
                                     刪除
                                 </button>
                             </td>
                             <td>
                                 {{item.product.title}}
                             </td>
-                            <td >
+                            <td>
                                 <button type="button" class="btn" @click="updateCart('changeQty',item.id,item.qty-1)">
                                     -
                                 </button>
@@ -98,31 +104,7 @@
             </div>
         </div>
         <div class="row">
-            <form class="col-6 mx-auto">
-                <div class="mb-3">
-                    <label class="form-label" for="email">Email :</label>
-                    <input class="form-control" type="email" name="email" id="email" placeholder="name@example.com">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="name">收件人姓名 :</label>
-                    <input class="form-control" type="text" name="name" id="name">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="phone">收件人電話 :</label>
-                    <input class="form-control" type="text" name="phone" id="phone">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="address">收件人地址 :</label>
-                    <input class="form-control" type="text" name="address" id="address">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="message">留言 :</label>
-                    <textarea class="form-control" name="message" id="message" rows="3"></textarea>
-                </div>
-                <div class="d-grid">
-                    <button type="button" class="btn btn-danger">送出訂單</button>
-                </div>
-            </form>
+            <customerinfo></customerinfo>
         </div>
         <modal ref="modal" :temp-product="tempProduct" @get-cart="getCarts"></modal>
     </div>
@@ -131,5 +113,8 @@
 <!-- <script src="https://unpkg.com/vue@next"></script> -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+    crossorigin="anonymous"></script>
+
 </html>
