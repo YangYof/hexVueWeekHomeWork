@@ -79,14 +79,16 @@ export default {
         const message = ref('')
 
         const sendOrder = ()=>{
+            emit('isLoadingSwitch');
             let customerContent = message.value;
             axios.post(`${apiUrl}/api/${apiPath}/order`, { data: {user},customerContent})
                 .then(res => {
-                    console.log(res);
+                    reset();
                     emit('get-cart');
                 })
                 .catch(err => {
                     console.log(err);
+                    emit('isLoadingSwitch');
                 })
         }
 
@@ -95,8 +97,16 @@ export default {
             return phoneNumber.test(value) ? true : '需要正確的電話號碼'
         }
 
+        const reset = ()=> { 
+            user.email = '';
+            user.name = '';
+            user.tel = '';
+            user.address = '';
+            user.message = '';
+        }
+
         return {
-            sendOrder ,user ,message ,isPhone
+            sendOrder ,user ,message ,isPhone ,reset
         }
     }
 }

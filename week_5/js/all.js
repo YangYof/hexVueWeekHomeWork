@@ -3,12 +3,14 @@ import customerinfo from './components/customerinfo.js'
 
 const { createApp, toRef, onMounted, ref } = Vue;
 
+const { loading } = VueLoading.Component;
+
 const apiUrl = "https://vue3-course-api.hexschool.io/v2";
 const apiPath = "yofyang";
 
 const app = createApp({
     components: {
-        modal, customerinfo,
+        modal, customerinfo,loading,
     },
     setup() {
         // 取得商品列表
@@ -18,6 +20,7 @@ const app = createApp({
                 .then(res => {
                     products.value = res.data.products
                     // console.log(res.data.products, products.value);
+                    isLoading.value = false
                 })
                 .catch(err => { console.log(err) })
         };
@@ -28,6 +31,7 @@ const app = createApp({
         const getCarts = () => {
             axios.get(`${apiUrl}/api/${apiPath}/cart`)
                 .then(res => {
+                    isLoading.value = false
                     carts.value = res.data.data.carts;
                     totalPrice.value = res.data.data.final_total;
                 })
@@ -36,6 +40,7 @@ const app = createApp({
 
         // 刪除購物車
         const daleteCart = (status, id) => {
+            isLoadingSwitch()
             let url = `${apiUrl}/api/${apiPath}/cart/${id}`
             if (status == 'all') {
                 url = `${apiUrl}/api/${apiPath}/carts`
@@ -43,12 +48,14 @@ const app = createApp({
             axios.delete(url)
                 .then(res => {
                     getCarts(); // 重新取得購物車列表
+                    isLoadingSwitch()
                 })
                 .catch(err => { console.log(err) })
         }
 
         // 更新購物車
         const updateCart = (status, id, qty) => {
+            isLoadingSwitch()
             let item = {
                 product_id: id,
                 qty: qty
@@ -62,6 +69,7 @@ const app = createApp({
             qty <= 0 ? daleteCart(id) : false; // 商品數量 <=0 就刪除
             axios[httpMethods](url, { data: item })
                 .then(res => {
+                    isLoadingSwitch()
                     getCarts(); // 重新取得購物車列表
                 })
                 .catch(err => { console.log(err) })
@@ -75,6 +83,11 @@ const app = createApp({
             modal.value.openModal()
         }
 
+        // isLoading套件開關
+        const isLoading = ref(true);
+        const isLoadingSwitch = ()=>{
+            isLoading.value = !isLoading.value
+        }
         onMounted(() => {
             getProducts()  // 執行取得商品列表
             getCarts()  // 執行取得購物車列表
@@ -87,7 +100,12 @@ const app = createApp({
             carts, totalPrice, daleteCart, updateCart,
             // 開啟單一商品詳細列表
             openModal, tempProduct, modal,
+            // isLoading套件開關
+            isLoading,isLoadingSwitch
         }
     }
 })
-app.mount("#app")
+
+app.use(VueLoading.Plugin);
+app.component('loading', VueLoading.Component)
+app.mount('#app')
