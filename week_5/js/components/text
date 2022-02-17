@@ -1,0 +1,25 @@
+<form class="col-6 mx-auto" @submit.prevent="sendOrder">
+    <div class="mb-3">
+        <label class="form-label" for="email">Email :</label>
+        <input class="form-control" type="email" v-model="user.email" name="email" id="email" placeholder="請輸入Email">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="name">收件人姓名 :</label>
+        <input class="form-control" type="text" v-model="user.name" name="name" id="name" placeholder="請輸入姓名">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="tel">收件人電話 :</label>
+        <input class="form-control" type="text" v-model="user.tel" name="tel" id="tel" placeholder="請輸入電話">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="address">收件人地址 :</label>
+        <input class="form-control" type="text" v-model="user.address" name="address" id="address" placeholder="請輸入地址">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="message">留言 :</label>
+        <textarea class="form-control" name="message" v-model="message" id="message" rows="3"></textarea>
+    </div>
+    <div class="d-grid">
+        <button type="submit" class="btn btn-danger">送出訂單</button>
+    </div>
+</form>

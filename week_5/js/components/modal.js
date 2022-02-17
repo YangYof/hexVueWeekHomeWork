@@ -1,4 +1,4 @@
-import { createApp, toRef, onMounted, ref } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.1.4/vue.esm-browser.min.js'
+const { onMounted, ref } = Vue;
 
 const apiUrl = "https://vue3-course-api.hexschool.io/v2";
 const apiPath = "yofyang";

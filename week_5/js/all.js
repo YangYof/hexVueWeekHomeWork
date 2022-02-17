@@ -1,7 +1,7 @@
 import modal from './components/modal.js'
 import customerinfo from './components/customerinfo.js'
 
-import { createApp, ref, onMounted, reactive } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.1.4/vue.esm-browser.min.js'
+const { createApp, toRef, onMounted, ref } = Vue;
 
 const apiUrl = "https://vue3-course-api.hexschool.io/v2";
 const apiPath = "yofyang";
@@ -85,7 +85,7 @@ const app = createApp({
             products, getCarts,
             // 購物車列表, 購物車總額, 刪除(單ㄧ以及全部)購物車 ,加入(更新)購物車
             carts, totalPrice, daleteCart, updateCart,
-            // 單一商品
+            // 開啟單一商品詳細列表
             openModal, tempProduct, modal,
         }
     }
