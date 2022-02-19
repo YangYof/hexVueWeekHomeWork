@@ -14,7 +14,7 @@ defineRule('max', max);
 loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
 
 configure({ // 用來做一些設定
-  generateMessage: localize('zh_TW'), //啟用 locale 
+    generateMessage: localize('zh_TW'), //啟用 locale 
 });
 //  ------------------------------------------------------------------------------
 
@@ -74,14 +74,14 @@ export default {
             </div>
         </v-form>
     `,
-    setup(props,{emit}) {
+    setup(props, { emit }) {
         const user = reactive({})
         const message = ref('')
 
-        const sendOrder = ()=>{
+        const sendOrder = () => {
             emit('isLoadingSwitch');
             let customerContent = message.value;
-            axios.post(`${apiUrl}/api/${apiPath}/order`, { data: {user},customerContent})
+            axios.post(`${apiUrl}/api/${apiPath}/order`, { data: { user }, customerContent })
                 .then(res => {
                     reset();
                     emit('get-cart');
@@ -92,12 +92,12 @@ export default {
                 })
         }
 
-        const isPhone = (value)=>{
+        const isPhone = (value) => {
             const phoneNumber = /^(09)[0-9]{8}$/
             return phoneNumber.test(value) ? true : '需要正確的電話號碼'
         }
 
-        const reset = ()=> { 
+        const reset = () => {
             user.email = '';
             user.name = '';
             user.tel = '';
@@ -106,7 +106,7 @@ export default {
         }
 
         return {
-            sendOrder ,user ,message ,isPhone ,reset
+            sendOrder, user, message, isPhone, reset
         }
     }
 }

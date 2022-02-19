@@ -1,7 +1,7 @@
 import modal from './components/modal.js'
 import customerinfo from './components/customerinfo.js'
 
-const { createApp, toRef, onMounted, ref } = Vue;
+const { createApp, onMounted, ref } = Vue;
 
 const { loading } = VueLoading.Component;
 

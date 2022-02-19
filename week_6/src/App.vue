@@ -7,7 +7,8 @@
 </template>
 
 <style lang="scss">
-#app {
+  @import './assets/scss/all.scss';
+  #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
