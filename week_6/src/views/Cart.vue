@@ -39,14 +39,15 @@
       </tr>
     </tfoot>
   </table>
+  <OrderInfo />
 </template>
 
 <script>
+import OrderInfo from '../components/OrderInfo.vue'
 export default {
-  data () {
-    return {}
+  components: {
+    OrderInfo
   },
-  methods: {},
   mounted () {
     this.$store.dispatch('getCart')
   }
