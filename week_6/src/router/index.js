@@ -1,26 +1,39 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import Products from '../views/ProductsViews.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue')
-  },
-  {
-    path: '/products',
-    name: 'Products',
-    component: () => import('../views/ProductsViews.vue'),
+    component: Home,
     children: [
       {
-        path: 'product',
-        name: 'Product',
-        component: () => import('../components/ProductComponent.vue')
+        path: '/productsview',
+        name: 'ProductsView',
+        component: Products
+      },
+      {
+        path: 'cart',
+        name: 'Cart',
+        component: () => import('../views/Cart.vue')
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/DashBoard.vue'),
+    children: [
+      {
+        path: 'products',
+        name: 'Products',
+        component: () => import('../views/AdminProducts.vue')
+      },
+      {
+        path: 'orders',
+        name: 'Orders',
+        component: () => import('../views/AdminOrder.vue')
       }
     ]
   }

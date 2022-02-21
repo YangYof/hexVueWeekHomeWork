@@ -4,6 +4,11 @@
 
 <script>
 export default {
-  name: 'product'
+  name: 'product',
+  data () {
+    return {}
+  },
+  methods: {},
+  mounted () {}
 }
 </script>
